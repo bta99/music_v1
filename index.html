@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music</title>
+    <script src="https://unpkg.com/boxicons@2.0.9/dist/boxicons.js"></script>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .bg {
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(45deg, transparent, lightpink, royalblue, lightpink, transparent);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .music_box {
+        width: 400px;
+        height: 400px;
+        background-color: aqua;
+        border-radius:10px;
+        overflow: hidden;
+        box-shadow: 4px 4px 20px 0px;
+    }
+    .music_box h3{
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .bg_child {
+        width: 100%;
+        height: 70%;
+        background: linear-gradient(greenyellow, lightpink);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .image {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        transition: all 0.5s;
+    }
+
+    .active{
+        animation: bta linear infinite 5.5s;
+    }
+    @-webkit-keyframes bta{
+        to{
+         transform: rotate(360deg);
+        }
+    }
+
+    .image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .controls {
+        width: 100%;
+        height: 30%;
+        background-color: cornflowerblue;
+        position: relative;
+    }
+    .controls button{
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all 0.5s;
+    }
+  .pre{
+      left: 30%;
+  }
+  .next{
+      left: 60%;
+  }
+  .play_pause{
+      top: 50%;
+      left: 45%;
+      opacity: 0;
+      visibility: hidden;
+  }
+  .pause{
+    top: 50%;
+      left: 45%;
+    }
+  .processbar{
+      width:200px;
+      height: 5px;
+      border-radius: 10px;
+      background-color: darkgray;
+      position: absolute;
+      top:80%;
+      left: 50%;
+      transform: translateX(-50%);
+  }
+  .fillbar{
+      position: absolute;
+      width:10px;
+      height: 5px;
+      border-radius: 10px;
+      background-color: aquamarine;
+  }
+  .move{
+      position: absolute;
+      width:10px;
+      height: 10px;
+      transform: scale(1.5);
+      border-radius: 50%;
+      background-color: aquamarine;
+      top:-50%;
+      right: 0;
+      cursor: pointer;
+  }
+ 
+ @media screen and (max-width:480px){
+     .music_box{
+         width:90%;
+     }
+     .music_box h3{
+         font-size: 13px;
+     }
+ }
+</style>
+
+<body>
+    <div class="bg">
+        <div class="music_box">
+            <h3>Demo</h3>
+            <div class="bg_child">
+                <div class="image">
+                    <img src="" alt="">
+                </div>
+            </div>
+            <div class="controls">
+                <button class="pre"><box-icon name='skip-previous-circle' class="icon"></box-icon></button>
+                <button class="play_pause">
+                    <box-icon name='play-circle' class="icon"></box-icon>
+                </button>
+                <button class="pause"><box-icon name='pause-circle' ></box-icon></button>
+                <button class="next"><box-icon name='skip-next-circle' class="icon"></box-icon></button>
+
+                <div class="processbar">
+                   <div class="fillbar">
+                    <div class="move"></div>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    let btnPlay = document.querySelector('.play_pause');
+    let btnPause = document.querySelector('.pause');
+    let image_song = document.querySelector('.image');
+    let image = document.querySelector('.image img');
+    let fillbar = document.querySelector('.fillbar');
+    let move = document.querySelector('.move');
+    let title = document.querySelector('.music_box h3');
+    let btnPre = document.querySelector('.pre');
+    let btnNext = document.querySelector('.next');
+    let list_song = [
+        'song1.mp3',
+        'song2.mp3',
+        'song3.mp3',
+        'song4.mp3',
+        'song5.mp3'
+    ];
+
+    let images_songs = [
+        'anh1.jpg',
+        'anh2.jpg',
+        'anh3.jpg',
+        'anh4.jpg',
+        'anh5.jpg'
+    ];
+
+    let title_song = [
+         'Nàng Thơ (Singer:Hoàng Dũng)',
+         'Sài Gòn Đau Lòng Quá (Singer:Hoàng Duyên)',
+         'Muộn Rồi Mà Sao Còn (Singer:Sơn Tùng MTP)',
+         'Chúng Ta Của Sao Này (Singer:TRI)',
+         '3017 3 (Singer:WN Duong Nau)'
+    ];
+    let song = new Audio();
+    let current_song = 0;
+    window.onload = ()=>
+    {
+      title.innerHTML = title_song[current_song];
+      image.setAttribute('src',images_songs[current_song]+'');
+      song.src = list_song[current_song];
+      song.play(); 
+      image_song.classList.add('active');
+    }
+    btnPlay.onclick = ()=> {
+      btnPlay.style.opacity = '0';
+      btnPlay.style.visibility = 'hidden';
+      btnPause.style.opacity = '1';
+      btnPause.style.visibility = 'visible';
+      image_song.classList.add('active');
+      song.src = list_song[current_song];
+      song.play();   
+}
+    btnPause.onclick = ()=> {
+      btnPlay.style.opacity = '1';
+      btnPlay.style.visibility = 'visible';
+      btnPause.style.opacity = '0';
+      btnPause.style.visibility = 'hidden';
+      image_song.classList.remove('active');
+      song.pause();
+    }
+
+    song.addEventListener('timeupdate',()=>{
+        let position = song.currentTime / song.duration;
+        fillbar.style.width = position * 100 + "%";
+        // move.style.transform = 'translateX('+(position * 200 + "%)");
+    })
+
+   btnNext.onclick = ()=>{
+       if(current_song < list_song.length - 1)
+       {
+        current_song++;
+       }
+       else{
+           current_song = 0;
+       }
+      title.innerHTML = title_song[current_song];
+      image.setAttribute('src',images_songs[current_song]+'');
+      song.src = list_song[current_song];
+      song.play(); 
+      image_song.classList.add('active');
+   }
+   btnPre.onclick = ()=>{
+       if(current_song > 0)
+       {
+        current_song--;
+       }
+       else{
+           current_song = list_song.length - 1;
+       }
+      title.innerHTML = title_song[current_song];
+      image.setAttribute('src',images_songs[current_song]+'');
+      song.src = list_song[current_song];
+      song.play(); 
+      image_song.classList.add('active');
+   }
+</script>
+</html>
